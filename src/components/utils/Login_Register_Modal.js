@@ -1,7 +1,11 @@
 import React from 'react';
 import {useEffect, useState, useRef} from 'react';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Modal = ({ modalOpen, hideModal, tab}) => {
+   
     const modal_main_ref = useRef();
     const emailRef = useRef();
     const usernameRef = useRef();
@@ -11,6 +15,7 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
+    
 
     useEffect(() => {
         activateTab(tab);
@@ -25,6 +30,9 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
           return true;
         }
         return false;
+    }
+    const notify = () => {
+        return toast("Wow so easy !");
     }
     const validatePasword = password => {
         if (password.length >= 6) {
@@ -95,12 +103,36 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
 
     const register = e => {
         e.preventDefault();
+        if(!username) {
+            usernameRef.current.style.border = '1px solid red';
+            
+            return;
+        }
+        if(!email) {
+            emailRef.current.style.border = '1px solid red';
+            return;
+        }else if (!validateEmail(email)) {
+            emailRef.current.style.border = '1px solid red';
+            return;
+        }
+        if(!password) {
+            passRef.current.style.border = '1px solid #d2d8d8';
+            return;
+        }
         let data = {
             username,
             email,
             password,
         }
         console.log(data);
+
+        axios.post("http://localhost:3002/api/users/register", data)
+            .then((res) => {
+                console.log(res.data);
+            }).catch((err) => {
+                console.log(err);
+            })
+        
     }
    
     return (

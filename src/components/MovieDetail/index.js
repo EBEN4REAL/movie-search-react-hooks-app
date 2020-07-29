@@ -17,7 +17,7 @@ const reducer = (state, action) => {
                 ...state,
                 loading: true
             }
-        case('Not Laoding'):
+        case('Not Loading'):
             return {
                 ...state,
                 loading : false
@@ -49,7 +49,6 @@ const MovieDetails = props => {
 
     const {movieDetails, loading} = state; 
 
-    console.log(movieDetails);
     return (
         <div style={{
             backgroundImage: `linear-gradient(rgb(47, 47, 47, 0.86), rgb(47, 47, 47, 0.86)), url('https://img.yts.mx/assets/images/movies/onward_2020/background.jpg')`,
