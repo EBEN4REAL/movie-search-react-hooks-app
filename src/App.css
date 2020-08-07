@@ -22,7 +22,6 @@ p {
 }
 /* HEADER */
 .main_header {
-  z-index: 9999;
   /* background-color: #1d1d1d; */
   height: 60px;
   display: flex;

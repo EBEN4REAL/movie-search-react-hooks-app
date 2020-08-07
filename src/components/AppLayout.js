@@ -9,7 +9,9 @@ class Layout extends React.Component {
         super(props);
        
     }
+    componentDidMount() {
 
+    }
     searchEvent(event) {
         this.props.filtertext(event.target.value);
     }

@@ -1,20 +1,23 @@
 import React from 'react';
 import {useEffect, useState, useRef} from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import Auth from '../utils/authentication';
 
 const Modal = ({ modalOpen, hideModal, tab}) => {
    
     const modal_main_ref = useRef();
-    const emailRef = useRef();
-    const usernameRef = useRef();
-    const passRef = useRef();
+    const regEmailRef = useRef();
+    const lgEmailRef = useRef();
+    const regUserNameRef = useRef();
+    const regPassRef = useRef();
+    const lgPassRef = useRef();
     const confPassRef = useRef();
     const [activeTab, activateTab] = useState(''); 
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
+    const [regpassword, setPassword] = useState('');
+    const [regemail, setEmail] = useState('');
+    const [regusername, setUsername] = useState('');
     
 
     useEffect(() => {
@@ -24,15 +27,24 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
           document.removeEventListener("mousedown", handleClick); // return function to be called when unmounted
         };
       }, []);
-
+    
+    const createNotification = (type, message) => {
+        switch (type) {
+            case 'success':
+                NotificationManager.success(message, '', 3000);
+                break;
+            case 'error':
+                NotificationManager.error(message, '', 2000);
+                break;
+            default:
+                return ''
+        }
+    }
     const validateEmail = email =>  {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
           return true;
         }
         return false;
-    }
-    const notify = () => {
-        return toast("Wow so easy !");
     }
     const validatePasword = password => {
         if (password.length >= 6) {
@@ -41,55 +53,7 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
             return false;
         }
     }
-    const validateInput = e => {
-        let _errNode = e.target.parentNode.children[1];
-        console.log(validatePasword(e.target.value));
-        if(e.target.name === 'email') {
-            if(!validateEmail(e.target.value)) {
-                emailRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'Invalid Email format';
-            }else {
-                emailRef.current.style.border = '1px solid #d2d8d8';
-                _errNode.innerHTML = '';
-                setEmail(e.target.value)
-            }
-        }
-        if(e.target.name === 'username') {
-            if(e.target.value === "") {
-                usernameRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'This Field iws required';
-            }else {
-                usernameRef.current.style.border = '1px solid #d2d8d8';
-                _errNode.innerHTML = '';
-                setUsername(e.target.value)
-            }
-        }
-        if(e.target.name === 'password') {
-            if(e.target.value === "") {
-                passRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'Fill in this field';
-            }else if(!validatePasword(e.target.value)) {
-                passRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'Password must be more than six(6) characters';
-            }else {
-                passRef.current.style.border = '1px solid #d2d8d8';
-                _errNode.innerHTML = '';
-                setPassword(e.target.value);
-            }
-        }
-        if(e.target.name === 'confPass'){
-            if(e.target.value === '') {
-                confPassRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'Confirm password';
-            }else if(password.length !== e.target.value.length){
-                confPassRef.current.style.border = '1px solid red';
-                _errNode.innerHTML = 'Passwords must match';
-            }else {
-                confPassRef.current.style.border = '1px solid #d2d8d8';
-                _errNode.innerHTML = '';
-            }
-        }
-    }
+  
     const handleClick = e => {
         if (modal_main_ref.current.contains(e.target)) {
             return;
@@ -103,40 +67,70 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
 
     const register = e => {
         e.preventDefault();
-        if(!username) {
-            usernameRef.current.style.border = '1px solid red';
-            
-            return;
+        if(!regUserNameRef.current.value) {
+            return createNotification('error' , "Please input your username");
         }
-        if(!email) {
-            emailRef.current.style.border = '1px solid red';
-            return;
-        }else if (!validateEmail(email)) {
-            emailRef.current.style.border = '1px solid red';
-            return;
+       
+        if(!validateEmail(regEmailRef.current.value)) {
+            return createNotification('error' , "Invalid Email Format");
         }
-        if(!password) {
-            passRef.current.style.border = '1px solid #d2d8d8';
-            return;
+        if(!regPassRef.current.value) {
+            return createNotification('error' , "Confirm your password");
+        }else  {
+            if(!validatePasword(regPassRef.current.value)) {
+                return createNotification('error' , "Passwords must not be less than 6 characters");
+            }
         }
-        let data = {
-            username,
-            email,
-            password,
+        if(!confPassRef.current.value) {
+            return createNotification('error' , "Confirm your password");
+        }else  {
+            if(regPassRef.current.value !== confPassRef.current.value) {
+                return createNotification('error' , "Passwords must match");
+            }
         }
-        console.log(data);
-
+        const data = {
+            username: regUserNameRef.current.value,
+            email: regEmailRef.current.value,
+            password: regPassRef.current.value
+        }
         axios.post("http://localhost:3002/api/users/register", data)
             .then((res) => {
-                console.log(res.data);
+                createNotification('success' , "Signup Successful")
+                activateTab("login");
             }).catch((err) => {
                 console.log(err);
+        })
+    }
+    const login = e => {
+        e.preventDefault();
+        if(!validateEmail(lgEmailRef.current.value)) {
+            return createNotification('error' , "Invalid Email Format");
+        }
+        if(!lgPassRef.current.value) {
+            return createNotification('error' , "Confirm your password");
+        }else  {
+            if(!validatePasword(lgPassRef.current.value)) {
+                return createNotification('error' , "Passwords must not be less than 6 characters");
+            }
+        }
+        let data = {
+            email: lgEmailRef.current.value,
+            password: lgPassRef.current.value
+        }
+
+        axios.post("http://localhost:3002/api/users/login", data)
+            .then((res) => {
+                createNotification('success' , "Login Successful");
+                Auth.authenticate();
+                localStorage.setItem('userDetails' , JSON.stringify(res.data.userDetails));
+            }).catch((err) => {
+
             })
-        
     }
    
     return (
         <div className={`modal_wrapper ${modalOpen ? ' display-block' : 'display-none'}}`}>
+            <NotificationContainer />
             <div className="modal_main" ref={modal_main_ref}>
                 <div className="tab__menu">
                     <div className={`tab_item ${activeTab === 'login' ? 'acitve_tab_item' : null}`} onClick={(e) => makeActive(e, 'login')}>
@@ -146,29 +140,29 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
                         <h4 className={`header_title ${activeTab === 'register' ? 'active_tab_header' : null}`} >Register</h4>
                     </div>
                 </div>
-                <form className="form_wrapper mt-5" onSubmit={(e) => register(e)}>
+                <form className="form_wrapper mt-5">
+                    
                     {
                         activeTab === 'login' ? (
                            <div>
-                                <div className="input_wrapper">
+                                <div className="input_wrapper"  >
                                     <div className="input_icon_placeholder">
-                                        <i className="fa fa-user" name="username" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
+                                        <i className="fa fa-user" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
-                                    <div className="input_div">
-                                        <input type="email" placeholder="Username or Email" name="email" className="input__container"  />
-                                        <div className="error_flag" ></div>
+                                    <div className="input_div" >
+                                        <input type="email" ref={lgEmailRef} placeholder="Username or Email" name="lgemail" className="input__container"   />
                                     </div>
                                 </div>
-                                <div className="input_wrapper mt-4">
+                                <div className="input_wrapper mt-4" >
                                     <div className="input_icon_placeholder">
                                         <i className="fa fa-lock" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
-                                    <div className="input_div">
-                                        <input type="password" placeholder="Password" className="input__container"  />
+                                    <div className="input_div" >
+                                        <input type="password" ref={lgPassRef} placeholder="Password" className="input__container" name="lgpassword"  />
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <button className="button success max-width" style={{padding: '10px'}}>
+                                    <button className="button success max-width" style={{padding: '10px'}} onClick={(e) => login(e)}>
                                         Login
                                     </button>
                                 </div>
@@ -176,41 +170,41 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
                         ) : 
                         (
                             <div>
-                                <div className="input_wrapper" ref={usernameRef}>
+                                <div className="input_wrapper" >
                                     <div className="input_icon_placeholder">
                                         <i className="fa fa-user" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
                                     <div className="input_div">
-                                        <input type="text" placeholder="Username" name="username" className="input__container" onBlur={(e) => validateInput(e)} />
+                                        <input type="text" placeholder="Username" ref={regUserNameRef} name="regusername" className="input__container"  />
                                         <div className="error_div"></div>
                                     </div>
                                     
                                 </div>
-                                <div className="input_wrapper mt-4" ref={emailRef} >
+                                <div className="input_wrapper mt-4"  >
                                     <div className="input_icon_placeholder">
                                         <i className="fa fa-envelope" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
                                     <div className="input_div" >
-                                        <input type="email" placeholder="Email" name="email" className="input__container" onBlur={(e) => validateInput(e)}   />
+                                        <input type="email" placeholder="Email" ref={regEmailRef} name="regemail" className="input__container" />
                                         <div className="error_div"></div>
                                     </div>
                                     
                                 </div>
-                                <div className="input_wrapper mt-4" ref={passRef}>
+                                <div className="input_wrapper mt-4" >
                                     <div className="input_icon_placeholder">
                                         <i className="fa fa-lock" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
                                     <div className="input_div">
-                                        <input type="password" name="password" placeholder="Password" className="input__container" onBlur={(e) => validateInput(e)} />
+                                        <input type="password" name="regpassword" ref={regPassRef} placeholder="Password" className="input__container" />
                                         <div className="error_div"></div>
                                     </div>
                                 </div>
-                                <div className="input_wrapper mt-4" ref={confPassRef}>
+                                <div className="input_wrapper mt-4" >
                                     <div className="input_icon_placeholder">
                                         <i className="fa fa-lock" aria-hidden="true" style={{color: '#eaeaea', fontSize: '20px'}}></i>
                                     </div>
                                     <div className="input_div">
-                                        <input type="password" placeholder="Confirm Password" name="confPass" className="input__container" onBlur={(e) => validateInput(e)}   />
+                                        <input type="password" placeholder="Confirm Password" ref={confPassRef} name="confPass" className="input__container"   />
                                         <div className="error_div"></div>
                                     </div>
                                 </div>
@@ -221,7 +215,7 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
                                     </p>
                                 </div>
                                 <div className="mt-4">
-                                    <button className="button success max-width" style={{padding: '10px'}} onSubmit={(e) => register(e)}>
+                                    <button className="button success max-width" style={{padding: '10px'}} onClick={(e) => register(e)} >
                                         Register
                                     </button>
                                 </div>

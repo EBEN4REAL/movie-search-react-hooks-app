@@ -4,7 +4,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paginator from '../utils/paginator';
 
 const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=4a3b711b";
-// const IMDB_API = "https://imdb8.p.rapidapi.com/title/get-top-stripe?currentCountry=US&purchaseCountry=US&tconst=tt0944947";
 
 
 
