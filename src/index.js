@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <React.StrictMode>

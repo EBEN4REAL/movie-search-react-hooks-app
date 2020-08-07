@@ -4,6 +4,7 @@ import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import Auth from '../utils/authentication';
+import Config from '../../config';
 
 const Modal = ({ modalOpen, hideModal, tab}) => {
    
@@ -15,9 +16,6 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
     const lgPassRef = useRef();
     const confPassRef = useRef();
     const [activeTab, activateTab] = useState(''); 
-    const [regpassword, setPassword] = useState('');
-    const [regemail, setEmail] = useState('');
-    const [regusername, setUsername] = useState('');
     
 
     useEffect(() => {
@@ -31,7 +29,7 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
     const createNotification = (type, message) => {
         switch (type) {
             case 'success':
-                NotificationManager.success(message, '', 3000);
+                NotificationManager.success(message, '', 2000);
                 break;
             case 'error':
                 NotificationManager.error(message, '', 2000);
@@ -93,8 +91,8 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
             email: regEmailRef.current.value,
             password: regPassRef.current.value
         }
-        axios.post("http://localhost:3002/api/users/register", data)
-            .then((res) => {
+        axios.post(`${Config.API_BASE_URL}/users/register`, data)
+            .then(() => {
                 createNotification('success' , "Signup Successful")
                 activateTab("login");
             }).catch((err) => {
@@ -118,11 +116,14 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
             password: lgPassRef.current.value
         }
 
-        axios.post("http://localhost:3002/api/users/login", data)
+        axios.post(`${Config.API_BASE_URL}/users/login`, data)
             .then((res) => {
                 createNotification('success' , "Login Successful");
                 Auth.authenticate();
                 localStorage.setItem('userDetails' , JSON.stringify(res.data.userDetails));
+                setTimeout(() => {
+                    hideModal();
+                }, 3000)
             }).catch((err) => {
 
             })

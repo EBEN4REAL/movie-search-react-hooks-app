@@ -1,6 +1,8 @@
 import React from "react";
 import LoginRegisterModal from '../Components/utils/Login_Register_Modal.js';
 import {useState, useRef} from 'react';
+import {Dropdown} from 'react-bootstrap';
+import Auth from './utils/authentication';
 
 
 
@@ -20,6 +22,7 @@ const Header = (props) => {
     showModal(false);
   }
 
+  console.log(Auth.getAuth());
   return (
     <header className="nav">
        <div className="main_header">
@@ -45,8 +48,23 @@ const Header = (props) => {
             <h2 className="">Browse Movies</h2>
           </div>
           <div className="menu_item">
-            <h2 className="" style={{color: 'white'}} ><span className="account_link" onClick={() => openModal('login')}>Login</span> | <span className="account_link" onClick={() => openModal('register')}>Register</span></h2>
+            {
+              Auth.getAuth() ? 
+              (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    {Auth.getAuth().username}
+                  </Dropdown.Toggle>
+      
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : 
+              <h2 className="" style={{color: 'white'}} ><span className="account_link" onClick={() => openModal('login')}>Login</span> | <span className="account_link" onClick={() => openModal('register')}>Register</span></h2>
+            }
           </div>
+         
         </div>
       </div>
       {
