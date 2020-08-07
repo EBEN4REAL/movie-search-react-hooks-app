@@ -13,6 +13,7 @@ const logoURl = "https://yts.mx/assets/images/website/logo-YTS.svg";
 const Header = (props) => {
   const [modalOpen, showModal]  = useState(false);
   const [activeMenu, setActiveMenu] = useState('login')
+  const [compKey, reMountComponent] = useState(0)
 
   const openModal = (type) => {
     setActiveMenu(type)
@@ -21,7 +22,13 @@ const Header = (props) => {
   const hideModal = () => {
     showModal(false);
   }
-
+  const logout = () => {
+    localStorage.removeItem("userDetails");
+    Auth.signout();
+    let key = compKey + 1;
+    reMountComponent(key);
+    alert();
+  }
   console.log(Auth.getAuth());
   return (
     <header className="nav">
@@ -51,13 +58,13 @@ const Header = (props) => {
             {
               Auth.getAuth() ? 
               (
-                <Dropdown>
+                <Dropdown key={compKey}>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
                     {Auth.getAuth().username}
                   </Dropdown.Toggle>
       
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
+                    <Dropdown.Item href="#" onClick={() => logout()}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               ) : 
