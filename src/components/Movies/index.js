@@ -45,6 +45,7 @@ const Movies = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [filterText, setFilterText] = useState("");
     const [page, setPage] = useState(1);
+    const [compKey, reMountComponent] = useState(0)
 
     
     useEffect(() => {
@@ -66,6 +67,14 @@ const Movies = (props) => {
 
     const filteredList = movies.filter((mv) => mv.Title.toLowerCase().includes(filterText.toLowerCase()));
 
+    filteredList.forEach((el,i) => {
+      el.index = i + 1;
+      if(!el.liked) {
+        el.liked = false
+      }
+    })
+
+    console.log(filteredList);
  
     const goToNextPage = () => {
       let pageNumber = page;
@@ -73,6 +82,20 @@ const Movies = (props) => {
       setPage(newPage);
     } 
 
+    const likeMovie = (index) => {
+      filteredList.forEach(el  => {
+        if(el.index === index) {
+          el.liked ? el.liked = false : el.liked = true
+          // if(!el.liked) {
+          //   el.liked = true
+          // }else {
+          //   el.liked = false
+          // }
+        }
+      })
+      let key = compKey + 1;
+      reMountComponent(key);
+    }
     const goTopreviousPage = () => {
       let pageNumber = page;
       let newPage = pageNumber - 1;
@@ -99,7 +122,7 @@ const Movies = (props) => {
                     <div className="errorMessage">{errorMessage}</div>
                 ) : (
                   filteredList.map((movie, index) => (
-                      <Movie key={index} movie={movie} movieId={index} goToMovieDetail={props.goToMovieDetail} />
+                      <Movie key={compKey + index} movie={movie} movieId={index} goToMovieDetail={props.goToMovieDetail} like={(index) => likeMovie(index)} />
                   ))
                 )}
           </div>

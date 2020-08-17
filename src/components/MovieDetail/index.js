@@ -40,6 +40,7 @@ const MovieDetails = props => {
               return response.json();
             })
             .then(jsonResponse => {
+                console.log(jsonResponse);
               dispatch({
                   type: "Fetched_Movies",
                   payload: jsonResponse
@@ -92,16 +93,7 @@ const MovieDetails = props => {
 
                             </div>
                             <div className="col-md-4">
-                                <span style={{fontSize:'1.15em', fontWeight: 700}} className="text-white">976</span> 
-                            </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-md-2">
-                            <i className="fa fa-pagelines" aria-hidden="true" style={{color:'#6ac045', width: '75px' }}></i>
-
-                            </div>
-                            <div className="col-md-4">
-                                <span style={{fontSize:'1.15em', fontWeight: 700}} className="text-white">28% - Critics</span> 
+                                <span style={{fontSize:'1.15em', fontWeight: 700}} className="text-white">{movieDetails.imdbVotes}</span> 
                             </div>
                         </div>
                         <div className="row mt-2">

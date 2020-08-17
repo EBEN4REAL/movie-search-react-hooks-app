@@ -36,14 +36,15 @@ const Movie = (props) => {
         {onHover.state ? 
           (
             <div className="details_button__wrapper">
-              <button href="https://yts.mx/" className="button success" onClick={() => props.history.push(`/movies/details/${props.movie.imdbID}`)}>View Details</button>
+              <button href="https://yts.mx/" className="button success" onClick={() => props.history.push(`/movies/details/${props.movie.imdbID}`)}>View Details</button> 
             </div>
           )
           : null
         }
          
       </div>
-        <h6 className="movie__title_tag">{props.movie.Title} <br />
+        <h6 className="movie__title_tag">{props.movie.Title} <i class="fa fa-heart-o ml-2 pull-right" style={props.movie.liked ? {cursor: 'pointer', color: 'red'} : {cursor: 'pointer', color: 'white'}}  aria-hidden="true" onClick={() => props.like(props.movie.index)}></i> 
+        <br />
           <span style={{color: "grey", fontSize: '16px', textAlign:'left'}}>({props.movie.Year})</span>
         </h6>
         

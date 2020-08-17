@@ -27,7 +27,6 @@ const Header = (props) => {
     Auth.signout();
     let key = compKey + 1;
     reMountComponent(key);
-    alert();
   }
   console.log(Auth.getAuth());
   return (
