@@ -86,11 +86,6 @@ const Movies = (props) => {
       filteredList.forEach(el  => {
         if(el.index === index) {
           el.liked ? el.liked = false : el.liked = true
-          // if(!el.liked) {
-          //   el.liked = true
-          // }else {
-          //   el.liked = false
-          // }
         }
       })
       let key = compKey + 1;
