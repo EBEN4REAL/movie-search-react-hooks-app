@@ -1,7 +1,7 @@
 import {Route, Switch} from 'react-router-dom';
 import App from './App';
 import React from 'react';
-import Layout from './Components/AppLayout';
+import Layout from './Components/AppLayout.js';
 import MovieDetails from './Components/MovieDetail';
 
 
