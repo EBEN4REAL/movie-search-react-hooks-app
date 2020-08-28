@@ -2,7 +2,7 @@ import {Route, Switch} from 'react-router-dom';
 import App from './App';
 import React from 'react';
 import Layout from './Components/Components/AppLayout';
-import MovieDetails from './Components/MovieDetail';
+import MovieDetails from './Components/Components/MovieDetail';
 
 
 class Routes extends React.Component {
