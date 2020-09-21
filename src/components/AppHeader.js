@@ -3,6 +3,7 @@ import LoginRegisterModal from '../Components/utils/Login_Register_Modal.js';
 import {useState, useRef} from 'react';
 import {Dropdown} from 'react-bootstrap';
 import Auth from './utils/authentication';
+import {connect} from 'react-redux';
 
 
 
@@ -83,7 +84,11 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser
+})
+
+export default connect(mapStateToProps, null)(Header);
 
 
 

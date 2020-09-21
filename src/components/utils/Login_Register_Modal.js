@@ -5,6 +5,9 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import 'react-notifications/lib/notifications.css';
 import Auth from '../utils/authentication';
 import Config from '../../config';
+import {connect} from 'react-redux';
+import {setCurrentUser} from '../../redux/user/user.actions';
+import userTypes from '../../redux/user/user.types'
 
 const Modal = ({ modalOpen, hideModal, tab}) => {
    
@@ -16,6 +19,7 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
     const lgPassRef = useRef();
     const confPassRef = useRef();
     const [activeTab, activateTab] = useState(''); 
+    const [userDetails, setUserDetails] = useState('');
     
 
     useEffect(() => {
@@ -99,6 +103,11 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
                 console.log(err);
         })
     }
+
+    const setCurrentUser = () => ({
+        type: userTypes.SET_USER,
+        payload: userDetails
+    })
     const login = e => {
         e.preventDefault();
         if(!validateEmail(lgEmailRef.current.value)) {
@@ -119,8 +128,10 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
         axios.post(`${Config.API_BASE_URL}/users/login`, data)
             .then((res) => {
                 createNotification('success' , "Login Successful");
-                Auth.authenticate();
-                localStorage.setItem('userDetails' , JSON.stringify(res.data.userDetails));
+                setCurrentUser(res.data.userDetails)
+                // setUserDetails(res.data.userDetails)
+                // Auth.authenticate();
+                // localStorage.setItem('userDetails' , JSON.stringify(res.data.userDetails));
                 setTimeout(() => {
                     hideModal();
                 }, 3000)
@@ -230,5 +241,16 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
     )
 }
 
+const mapStateToProps = ({user}) => {
+    return {
+        currentUser: user.currentUser
+    }
+}
 
-export default Modal;
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         setCurrentUser: dispatch()
+//     }
+// }
+
+export default connect(mapStateToProps, null)(Modal);

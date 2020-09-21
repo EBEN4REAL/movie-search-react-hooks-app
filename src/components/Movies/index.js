@@ -74,7 +74,6 @@ const Movies = (props) => {
       }
     })
 
-    console.log(filteredList);
  
     const goToNextPage = () => {
       let pageNumber = page;
