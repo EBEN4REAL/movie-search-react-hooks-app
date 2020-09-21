@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import {setCurrentUser} from '../../redux/user/user.actions';
 import userTypes from '../../redux/user/user.types'
 
-const Modal = ({ modalOpen, hideModal, tab}) => {
+const Modal = ({ modalOpen, hideModal, tab, setCurrentUser}) => {
    
     const modal_main_ref = useRef();
     const regEmailRef = useRef();
@@ -97,17 +97,13 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
         }
         axios.post(`${Config.API_BASE_URL}/users/register`, data)
             .then(() => {
-                createNotification('success' , "Signup Successful")
+                createNotification('success' , "Signup Successful");
                 activateTab("login");
             }).catch((err) => {
                 console.log(err);
-        })
+            })
     }
 
-    const setCurrentUser = () => ({
-        type: userTypes.SET_USER,
-        payload: userDetails
-    })
     const login = e => {
         e.preventDefault();
         if(!validateEmail(lgEmailRef.current.value)) {
@@ -128,10 +124,8 @@ const Modal = ({ modalOpen, hideModal, tab}) => {
         axios.post(`${Config.API_BASE_URL}/users/login`, data)
             .then((res) => {
                 createNotification('success' , "Login Successful");
+                localStorage.setItem('ytsUserDetails', JSON.stringify(res.data.userDetails));
                 setCurrentUser(res.data.userDetails)
-                // setUserDetails(res.data.userDetails)
-                // Auth.authenticate();
-                // localStorage.setItem('userDetails' , JSON.stringify(res.data.userDetails));
                 setTimeout(() => {
                     hideModal();
                 }, 3000)
@@ -247,10 +241,10 @@ const mapStateToProps = ({user}) => {
     }
 }
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         setCurrentUser: dispatch()
-//     }
-// }
+const mapDispatchToProps = dispatch => {
+    return {
+        setCurrentUser: (userDetails) => dispatch(setCurrentUser(userDetails))
+    }
+}
 
-export default connect(mapStateToProps, null)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

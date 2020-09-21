@@ -29,7 +29,6 @@ const Header = (props) => {
     let key = compKey + 1;
     reMountComponent(key);
   }
-  console.log(Auth.getAuth());
   return (
     <header className="nav">
        <div className="main_header">
@@ -56,11 +55,11 @@ const Header = (props) => {
           </div>
           <div className="menu_item">
             {
-              Auth.getAuth() ? 
+              props.user ? 
               (
                 <Dropdown key={compKey}>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    {Auth.getAuth().username}
+                    {props.user.username}
                   </Dropdown.Toggle>
       
                   <Dropdown.Menu>
@@ -84,9 +83,11 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
-})
+const mapStateToProps = ({user}) => {
+  return {
+      user: user.currentUser
+  }
+}
 
 export default connect(mapStateToProps, null)(Header);
 

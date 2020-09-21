@@ -1,6 +1,6 @@
 import userTypes from './user.types';
 
-export const setCurrentUSer = user => {
+export const setCurrentUser = user => {
     return {
         type: userTypes.SET_USER,
         user
