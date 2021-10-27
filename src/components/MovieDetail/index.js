@@ -66,7 +66,7 @@ const MovieDetails = props => {
                             <img
                                 width="200"
                                 alt={`The movie titled: 2008`}
-                                src={movieDetails.Poster && movieDetails.Poster}
+                                src={movieDetails.Poster ? movieDetails.Poster  : DEFAULT_PLACEHOLDER_IMAGE }
                                 style={{height: '99.5%'}}
                             />
                         </div>
