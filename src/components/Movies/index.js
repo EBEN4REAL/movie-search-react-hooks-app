@@ -107,7 +107,7 @@ const Movies = (props) => {
             ) : 
             null
           }
-          <div className="movies">  
+          <div className="movies row">  
                 {loading && !errorMessage ? (
                   <div style={{marginTop: '20px'}}>
                     <CircularProgress />

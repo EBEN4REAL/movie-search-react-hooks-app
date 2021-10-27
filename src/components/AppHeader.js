@@ -1,5 +1,5 @@
 import React from "react";
-import LoginRegisterModal from '../Components/utils/Login_Register_Modal.js';
+import LoginRegisterModal from '../components/utils/Login_Register_Modal.js';
 import {useState, useRef} from 'react';
 import {Dropdown} from 'react-bootstrap';
 import Auth from './utils/authentication';

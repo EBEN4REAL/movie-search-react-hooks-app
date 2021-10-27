@@ -1,6 +1,6 @@
 import React from 'react';
-import Banner from './Components/Banner';
-import Movies from './Components/Movies';
+import Banner from './components/Banner';
+import Movies from './components/Movies';
 import './App.css';
 
 const  App = (props) => {

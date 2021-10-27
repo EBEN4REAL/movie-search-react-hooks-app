@@ -14,8 +14,8 @@ const Movie = (props) => {
   classList = onHover.state ? 'movie_wrapper_overlay' : 'movie_wrapper';
   const poster = props.movie.Poster === "N/A" ? DEFAULT_PLACEHOLDER_IMAGE : props.movie.Poster;
     return (
-      <div className="movie" >
-        <div className={`movie_wrapper ${onHover.state ? 'overlay_border overlay_linear_gradient' : null}`} onMouseEnter={() => setHoverState({state: true, movieId: props.movieId})} onMouseLeave={() => setHoverState({state: false, movieId: props.movieId})}>
+      <div className="movie col-md-3" >
+        <div className={`movie_wrapper  ${onHover.state ? 'overlay_border overlay_linear_gradient' : ''}`} onMouseEnter={() => setHoverState({state: true, movieId: props.movieId})} onMouseLeave={() => setHoverState({state: false, movieId: props.movieId})}>
           <img
             width="200"
             alt={`The movie titled: ${props.movie.Title}`}
