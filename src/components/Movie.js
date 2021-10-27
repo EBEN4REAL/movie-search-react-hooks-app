@@ -10,8 +10,7 @@ const DEFAULT_PLACEHOLDER_IMAGE =
 const Movie = (props) => {
   const [onHover , setHoverState] = useState({});
 
-  let classList = 'movie_wrapper';
-  classList = onHover.state ? 'movie_wrapper_overlay' : 'movie_wrapper';
+ 
   const poster = props.movie.Poster === "N/A" ? DEFAULT_PLACEHOLDER_IMAGE : props.movie.Poster;
     return (
       <div className="movie col-md-3" >
