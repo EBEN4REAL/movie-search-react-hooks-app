@@ -196,10 +196,13 @@ input[type="search"] {
   border: 3px solid white;
   border-radius: 3px;
   border-width: 3px;
-  height: 300px;
-  width: 73%;
+  height: 400px;
+  width: 80%;
   margin: 0 auto;
   position: relative;
+}
+.movie_wrapper img {
+  height: 100%;
 }
 .movie__title_tag {
   width: 73%;
