@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { MovieContext } from '../../contexts/MovieContext';
 
 const Banner = (props) => {
-    return (
+      return (
       <div className="banner__section">
         <p className="App-intro">Download YTS YIFY movies: HD smallest size</p>
         <p className="" style={{color:"#ccc",fonSize: '.95em'}}>

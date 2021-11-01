@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useReducer } from "react"
+import React, { useState, useEffect, useReducer, useContext } from "react"
 import Movie from "../Movie";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paginator from '../utils/paginator';
-
+import { MovieContext } from '../../contexts/MovieContext';
 const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=4a3b711b";
 
 
@@ -15,34 +15,36 @@ const initialState = {
 };
 
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SEARCH_MOVIES_REQUEST":
-      return {
-        ...state,
-        loading: true,
-        errorMessage: null
-      };
-    case "SEARCH_MOVIES_SUCCESS":
-      return {
-        ...state,
-        loading: false,
-        movies: action.payload,
-      };
-    case "SEARCH_MOVIES_FAILURE":
-      return {
-        ...state,
-        loading: false,
-        errorMessage: action.error
-      };
-    default:
-      return state;
-  }
-};
+// const reducer = (state, action) => {
+//   switch (action.type) {
+//     case "SEARCH_MOVIES_REQUEST":
+//       return {
+//         ...state,
+//         loading: true,
+//         errorMessage: null
+//       };
+//     case "SEARCH_MOVIES_SUCCESS":
+//       return {
+//         ...state,
+//         loading: false,
+//         movies: action.payload,
+//       };
+//     case "SEARCH_MOVIES_FAILURE":
+//       return {
+//         ...state,
+//         loading: false,
+//         errorMessage: action.error
+//       };
+//     default:
+//       return state;
+//   }
+// };
 
 
 const Movies = (props) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [moviesList, setMovies] = useContext(MovieContext)
+
+    // const [state, dispatch] = useReducer(reducer, initialState);
     const [filterText, setFilterText] = useState("");
     const [page, setPage] = useState(1);
     const [compKey, reMountComponent] = useState(0)
@@ -54,16 +56,22 @@ const Movies = (props) => {
               return response.json();
             })
             .then(jsonResponse => {
-              dispatch({
-                  type: "SEARCH_MOVIES_SUCCESS",
-                  payload: jsonResponse.Search
-              });
+              setMovies({
+                ...moviesList,
+                movies: jsonResponse.Search,
+                filteredMoviesList: jsonResponse.Search,
+                loading: false
+              })
         });
         setFilterText(props.text);
     }, [page]);
 
 
-    const { movies, errorMessage, loading } = state;
+    const { movies, errorMessage, loading, filteredMoviesList } = moviesList;
+
+    // const renderedMovies = filteredMoviesList.length ? 
+    //   filteredMoviesList : 
+    //   movies
 
     const filteredList = movies.filter((mv) => mv.Title.toLowerCase().includes(filterText.toLowerCase()));
 
@@ -115,7 +123,7 @@ const Movies = (props) => {
                 ) : errorMessage ? (
                     <div className="errorMessage">{errorMessage}</div>
                 ) : (
-                  filteredList.map((movie, index) => (
+                  filteredMoviesList.map((movie, index) => (
                       <Movie key={compKey + index} movie={movie} movieId={index} goToMovieDetail={props.goToMovieDetail} like={(index) => likeMovie(index)} />
                   ))
                 )}

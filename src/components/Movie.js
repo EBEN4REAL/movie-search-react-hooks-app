@@ -42,7 +42,7 @@ const Movie = (props) => {
         }
          
       </div>
-        <h6 className="movie__title_tag">{props.movie.Title} <i class="fa fa-heart-o ml-2 pull-right" style={props.movie.liked ? {cursor: 'pointer', color: 'red'} : {cursor: 'pointer', color: 'white'}}  aria-hidden="true" onClick={() => props.like(props.movie.index)}></i> 
+        <h6 className="movie__title_tag">{props.movie.Title} <i className="ml-2 fa fa-heart-o pull-right" style={props.movie.liked ? {cursor: 'pointer', color: 'red'} : {cursor: 'pointer', color: 'white'}}  aria-hidden="true" onClick={() => props.like(props.movie.index)}></i> 
         <br />
           <span style={{color: "grey", fontSize: '16px', textAlign:'left'}}>({props.movie.Year})</span>
         </h6>

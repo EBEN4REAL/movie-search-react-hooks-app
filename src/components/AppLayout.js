@@ -1,31 +1,20 @@
 import React from 'react';
 import Header from "./AppHeader";
 import Footer from  "./AppFooter";
+import { MovieProvider } from '../contexts/MovieContext';
 
 
+const  Layout = ({filtertext, children}) => {
 
-class Layout extends React.Component {
-    constructor(props) {
-        super(props);
-       
-    }
-    componentDidMount() {
-
-    }
-    searchEvent(event) {
-        this.props.filtertext(event.target.value);
-    }
-
-    render() {
-        return (
-            <div>
-                
-                <Header inputChange={(event) => this.searchEvent(event)} />
-                    {this.props.children}
+    return (
+        <div>
+            <MovieProvider>
+                <Header />
+                    {children}
                 <Footer />
-            </div>
-        )
-    }
+            </MovieProvider>
+        </div>
+    )
 }
 
 
