@@ -6,8 +6,4 @@ const port = process.env.PORT || 3000 // Heroku will need the PORT environment v
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-// app.get('/', (req, res) => {
-//    res.sendFile(express.static(path.join(__dirname, 'build')));
-// });
-
 app.listen(port, () => console.log(`App is live on port ${port}!`))
