@@ -36,15 +36,15 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "react-scripts start",
+    "start": "node app",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  
+
   "browserslist": {
     "production": [
       ">0.2%",
