@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "16.14.0"
+    "node": "16.14.0",
+    "npm": "6.x"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -34,11 +35,11 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
